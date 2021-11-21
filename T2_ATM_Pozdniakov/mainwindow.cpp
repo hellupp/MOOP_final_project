@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QPixmap>
 
 #include <iostream>
 using namespace std;
@@ -10,6 +11,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
+    QPixmap pix(":/recources/atm.jpg");
+    int w = ui->image->width();
+    int h = ui->image->height();
+
+    ui->image->setPixmap(pix.scaled(w, h, Qt::KeepAspectRatio));
+
     set_default();
     setWindowTitle("ATM");
     this->setFixedSize(this->width(), this->height());
@@ -439,11 +446,20 @@ void MainWindow::on_screen_4_clicked()
                   const char *sender_c = sender.data();
                   QByteArray receiver =  last_transaction.getTo().toLocal8Bit();
                   const char *receiver_c = receiver.data();
-                  b.doTransaction(sender_c, receiver_c, last_transaction.getSum());
-                  QString message = "You send %1 to card %2";
-                  QString message_str = message.arg(last_transaction.getSum()).arg(receiver_c);
-                  QMessageBox::about(this, tr("Success."),
-                                       tr(message_str.toUtf8().data()));
+                  if(b.get_current_card().getSum() < last_transaction.getSum())
+                  {
+                      QMessageBox::warning(this, tr("Error"),
+                                           tr("Not tenough money on current card"));
+                  }
+                  else
+                  {
+
+                      b.doTransaction(sender_c, receiver_c, last_transaction.getSum());
+                      QString message = "You send %1 to card %2";
+                      QString message_str = message.arg(last_transaction.getSum()).arg(receiver_c);
+                      QMessageBox::about(this, tr("Success."),
+                                           tr(message_str.toUtf8().data()));
+                  }
               } else {
                   do{
                       QInputDialog inp;
@@ -499,15 +515,23 @@ void MainWindow::on_screen_4_clicked()
                       }
 
                   } while (amount < 0);
-                  QByteArray ba = b.get_current_card().getId().toLocal8Bit();
-                  const char *str = ba.data();
-                  QByteArray ba2 = card.toLocal8Bit();
-                  const char *str2 = ba2.data();
-                  b.doTransaction(str, str2, amount);
-                  QString message = "You send %1 to card %2";
-                  QString message_str = message.arg(amount).arg(card);
-                  QMessageBox::about(this, tr("Success"),
-                                       tr(message_str.toUtf8().data()));
+                  if(amount > b.get_current_card().getSum())
+                  {
+                      QMessageBox::warning(this, tr("Error"),
+                                           tr("Not enough money on card"));
+                  }
+                  else
+                  {
+                      QByteArray ba = b.get_current_card().getId().toLocal8Bit();
+                      const char *str = ba.data();
+                      QByteArray ba2 = card.toLocal8Bit();
+                      const char *str2 = ba2.data();
+                      b.doTransaction(str, str2, amount);
+                      QString message = "You send %1 to card %2";
+                      QString message_str = message.arg(amount).arg(card);
+                      QMessageBox::about(this, tr("Success"),
+                                           tr(message_str.toUtf8().data()));
+                  }
 
               }
 
@@ -1022,17 +1046,17 @@ void MainWindow::switch_on()
 
 void MainWindow::set_default()
 {
-//    b.addAccount("Nick");
-//    b.addAccount("Nazar");
-//    b.addAccount("Artem");
-//    b.addAccount("Dasha");
-//    b.addCard("1000000000000004", "1111", 100, true, 2);
-//    qDebug() << b.addCard("1000000000000002", "1111", 10, true, 0);
-//    qDebug() << b.addCard("1000000000000002", "1111", 10, true, 0);
-//    qDebug() << b.addCard("1000000000000003", "1111", 10000, false, 0);
-//    qDebug() << b.addCard("1000000000000000", "0000", 100, true, 0);
-//    qDebug() << b.addCard("1000000000000001", "1234", 1000, true, 1);
-//    qDebug() << b.addCard("1000000000000009", "1234", 1000, false, 1);
+    /*b.addAccount("Nick");
+    b.addAccount("Nazar");
+    b.addAccount("Artem");
+    b.addAccount("Dasha");
+    b.addCard("1000000000000004", "1111", 100, true, 2);
+    qDebug() << b.addCard("1000000000000002", "1111", 10, true, 0);
+    qDebug() << b.addCard("1000000000000002", "1111", 10, true, 0);
+    qDebug() << b.addCard("1000000000000003", "1111", 10000, false, 0);
+    qDebug() << b.addCard("1000000000000000", "0000", 100, true, 0);
+    qDebug() << b.addCard("1000000000000001", "1234", 1000, true, 1);
+    qDebug() << b.addCard("1000000000000009", "1234", 1000, false, 1);*/
     ui->info->close();
     ui->firstWindow->close();
     ui->mainWindow->close();

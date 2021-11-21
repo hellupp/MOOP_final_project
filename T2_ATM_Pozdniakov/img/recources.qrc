@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/recources">
+        <file>atm.jpg</file>
+    </qresource>
+</RCC>
