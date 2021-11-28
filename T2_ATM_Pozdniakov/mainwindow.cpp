@@ -508,7 +508,12 @@ void MainWindow::on_screen_4_clicked()
                                                     tr("Amount: "),   0,QLineEdit::Normal);
 
 
-                      if(amount == 0) return;
+                      if(amount == 0){
+                          QMessageBox::warning(this, tr("Error"),
+                                               tr("Can't send 0"));
+                          return;
+                      }
+
                       if(amount < 0){
                           QMessageBox::warning(this, tr("Error"),
                                                tr("Wrong input amount"));
@@ -645,6 +650,7 @@ void MainWindow::on_screen_8_clicked()
                 ui->cash->close();
 
             } else{
+            switch_off();
             set_default();
         }
 
@@ -732,6 +738,7 @@ void MainWindow::on_ok_clicked()
                 QMessageBox::about(this, tr("Welcome"),
                                    tr("PIN is correct"));
                 set_button_off();
+                switch_on();
 
                 ui->firstWindow->close();
                 ui->mainWindow->show();
@@ -1057,6 +1064,7 @@ void MainWindow::set_default()
     qDebug() << b.addCard("1000000000000000", "0000", 100, true, 0);
     qDebug() << b.addCard("1000000000000001", "1234", 1000, true, 1);
     qDebug() << b.addCard("1000000000000009", "1234", 1000, false, 1);*/
+    switch_off();
     ui->info->close();
     ui->firstWindow->close();
     ui->mainWindow->close();

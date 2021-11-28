@@ -25,7 +25,7 @@ public:
 	Bank()
     {
         QSqlQuery a_query;
-        db.setDatabaseName("/__MyFolder__/3course_1semestr/_MOOP_/MOOP_final_project/T2_ATM_Pozdniakov/db.db");
+        db.setDatabaseName("/Users/nikkirpa/Desktop/MOOP_final_project/T2_ATM_Pozdniakov/db.db");
         db.open();
 //        a_query.exec("CREATE TABLE CARDS (card_id VARCHAR (45) PRIMARY KEY UNIQUE NOT NULL, pin VARCHAR (45) NOT NULL, sum INTEGER NOT NULL, isActive BOOLEAN NOT NULL, user_id INTEGER REFERENCES ACCOUNTS (account_id) NOT NULL);");
 //        a_query.exec("TRUNCATE TABLE ACCOUNTS;");
