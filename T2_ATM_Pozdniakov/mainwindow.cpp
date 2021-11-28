@@ -1090,12 +1090,9 @@ void MainWindow::set_default()
 
 bool MainWindow::check_block_card(QString a)
 {
-    qDebug() << b.get_all_blocked()->length();
+    qDebug() << b.get_all_blocked()->contains(a);
     bool foo = true;
-    for(int i = 0; i <= b.get_all_blocked()->length(); i++)
-    {
-        if(a == b.get_all_blocked()[i]) foo = false;
-    }
+    if (b.get_all_blocked()->contains(a)) foo = false;
     if(!foo)
     {
         QMessageBox::warning(this, tr("Error"),
